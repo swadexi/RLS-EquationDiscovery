@@ -1,0 +1,39 @@
+sample = 3100;                  % Sets the number of data samples to be used for training.
+srcX = data_kuka;               % Define the input data.
+srcY = outY_kuka;               % Define the output data.
+x = srcX(100:sample,:);         % Selects a subset of input data from index 100 to 'sample'.
+y = srcY(100:sample,:);         % Selects a subset of output data from index 100 to 'sample' .
+
+libr = nonlinear_lib_v5;                    % Calls the nonlinear library class.
+bias_term = 0;                              % Sets whether to use a bias term (0 means no bias).
+X = libr.nonlinearize(x, bias_term);        % Transforms the input data into a nonlinear form using the library.
+d = size(X,2);                              % Gets the number of columns from the nonlinearized input matrix X (feature dimension).
+B = zeros(d, size(y,2));                    % Initializes the coefficient matrix with size (d x number of outputs).
+
+disp ("================== TRAINING DATA ==================");           % Displays a separator message for the training data.
+for st = 1:3                                            % Starts a loop to train the model for 3 sets of data (or outputs).
+    w_rls = zeros(d, 1);                                % Initializes weights to zero.
+    A = eye(d) * 1e6;                                   % Initializes matrix A with large values (1e6) on the diagonal (RLS method).
+    for i = 1: size(y,1)                                % Loop through each sample in the output data y.
+
+        x_i = X(i,:)' ;                                 % Extracts the feature vector from X and transposes it for correct dimensions.
+        y_i = y(i,st);                                  % Extracts the target value from the output y.
+
+        [w_rls, A] = RLS(x_i, y_i, A, w_rls);           % Updates weights w_rls and matrix A using the RLS algorithm.
+    end
+    prediksi{st} = [y(:,st) X * w_rls];                 % Stores the prediction results by calculating the dot product of X and weights w_rls.
+    fitx = calc_fitR(y(:,st), X * w_rls);               % Calculates the fit of the model to the data.
+    msex = [sqrt(mse(y(:,st), X * w_rls))];             % Computes the root mean square error of the predictions.
+    B(:,st) = w_rls;                                    % Stores the obtained weights into matrix B.
+end
+
+disp ("================== EQUATION =================="); % Displays a separator message for the equation results.
+threshold = 1e-4;                                        % Sets the threshold value to identify small coefficients.
+smallinds = (abs(B) < threshold);                        % Finds indices of coefficients that are smaller than the threshold.
+model_str = libr.equprint(B, smallinds, bias_term);      % Prints the model equations based on the weights and small indices.
+assignin("base", "model_str", model_str);                % Assigns the model string to the base workspace.
+segregate(model_str);                                    % Segregates equations based on the model string.
+
+disp ("================== TEST DATA =================="); % Displays a separator message for the test data.
+testSample = 1000;                                        % Sets the number of test data samples.
+Test = testPrediction(srcX(sample+1:sample+testSample,:), srcY(sample+1:sample+testSample,:), 0, B, libr); % Performs prediction on test data using the trained model.
