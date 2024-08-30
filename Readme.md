@@ -17,18 +17,22 @@ Follow these steps to run the project:
 
 ## Citation
 
-If you use this code in your research, please cite the following paper:
+If you use this code in your research, please cite the following papers:
 
+**Online Identification of Robot Manipulator Dynamics Using Recursive Least Squares with Nonlinear Functions:**
+  
+\```bibtex
 @inproceedings{istiqphara2024online,
   title={Online Identification of Robot Manipulator Dynamics Using Recursive Least Squares with Nonlinear Functions},
   author={Istiqphara, S. and Wahyunggoro, O. and Cahyadi, A. I.},
   booktitle={2024 6th International Conference on Control and Robotics},
   year={2024}
 }
+\```
 
----
+**Enhanced Equation Discovery of 3-DoF Robotic Manipulator Dynamics Using LASSO Model Selection Criteria with Variable Segregation Algorithm:**
 
-Dynamic Expression Nonlinearization 
+\```bibtex
 @article{istiqphara2024enhanced,
   title={Enhanced Equation Discovery of 3-DoF Robotic Manipulator Dynamics Using LASSO Model Selection Criteria with Variable Segregation Algorithm},
   author={Istiqphara, S. and Wahyunggoro, O. and Cahyadi, A. I.},
@@ -36,5 +40,8 @@ Dynamic Expression Nonlinearization
   volume={12},
   year={2024}
 }
+\```
+
 ---
+
 Feel free to adjust this content to better suit your project's specifics!
